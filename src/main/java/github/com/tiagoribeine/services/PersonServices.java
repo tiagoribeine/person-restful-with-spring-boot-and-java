@@ -1,5 +1,7 @@
 package github.com.tiagoribeine.services;
-
+import static github.com.tiagoribeine.mapper.ObjectMapper.parseListObjects;
+import static github.com.tiagoribeine.mapper.ObjectMapper.parseObject;
+import github.com.tiagoribeine.data.dto.PersonDTO;
 import github.com.tiagoribeine.exception.ResourceNotFoundException;
 import github.com.tiagoribeine.model.Person;
 import github.com.tiagoribeine.repository.PersonRepository;
@@ -25,25 +27,31 @@ public class PersonServices {
     PersonRepository repository; //Spring insere o repository no Service, permitindo conexão com o banco de dados
 
     // Busca TODAS as pessoas
-    public List<Person> findAll(){
+    public List<PersonDTO> findAll(){
         logger.info("Finding all people!"); //Registra uma operação normal do sistema a nivel informativo. Exibe a info no console/terminal
-       return  repository.findAll(); //Quem prove o findAll é o Spring Data
+        return parseListObjects(repository.findAll(), PersonDTO.class); //Utilizando o metodo do ObjectMapper para converter em uma DTO
     }
 
     //Busca uma pessoa por ID
-    public Person findById(Long id) {
+    public PersonDTO findById(Long id) {
         logger.info("Finding one Person");
-        return repository.findById(id)
+        var entity = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!")); //Alterar também no controller, inicialmente estava String
+        return parseObject(entity, PersonDTO.class); //Utilizando o metodo do ObjectMapper para converter em uma DTO
     }
 
-    public Person create(Person person){ //
+    public PersonDTO create(PersonDTO person){ //
+
         logger.info("Creating one Person!"); //Registra uma operação normal do sistema a nivel informativo.
-        return repository.save(person); //Salva e ja retorna ao controller
+        var entity = parseObject(person, Person.class);
+
+        return parseObject(repository.save(entity), PersonDTO.class); //Salva e ja retorna ao controller
     }
 
-    public Person update(Person person){
+    public PersonDTO update(PersonDTO person){
+
         logger.info("Updating One Person!"); //Registra uma operação normal do sistema a nivel informativo.
+
         Person entity = repository.findById(person.getId()) //Recuperamos a entidade pelo id fornecido pelo client. São dados que ja estão no banco
                 .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!")); //Alterar também no controller, inicialmente estava String
 
@@ -52,7 +60,7 @@ public class PersonServices {
         entity.setLastName(person.getLastName());
         entity.setAddress(person.getAddress());
         entity.setGender(person.getGender());
-        return repository.save(entity);
+        return parseObject(repository.save(entity), PersonDTO.class);
     }
 
     public void delete(Long id) {

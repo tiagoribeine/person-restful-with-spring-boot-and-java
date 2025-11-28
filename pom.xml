@@ -20,6 +20,7 @@
     <!-- Versões de bibliotecas -->
     <properties>
         <java.version>21</java.version> <!-- Versão do Java para compilar e executar -->
+        <dozer.version>7.0.0</dozer.version> <!-- Parametrizado o Dozer version -->
     </properties>
 
     <dependencies>
@@ -42,6 +43,12 @@
         </dependency>
 
         <dependency>
+            <groupId>com.github.dozermapper</groupId> <!-- Dependência do Dozer -->
+            <artifactId>dozer-core</artifactId>
+            <version>${dozer.version}</version> <!-- Valor parametrizado -->
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId> <!-- Spring Boot Test - testes automatizados -->
             <scope>test</scope>    <!-- Só usado em testes -->
@@ -53,6 +60,9 @@
             <scope>runtime</scope> <!-- Só disponível durante execução -->
             <optional>true</optional> <!-- Não é repassado para outros projetos -->
         </dependency>
+
+
+
     </dependencies>
 
     <build>

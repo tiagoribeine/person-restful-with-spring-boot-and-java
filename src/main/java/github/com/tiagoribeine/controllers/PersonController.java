@@ -1,6 +1,6 @@
 package github.com.tiagoribeine.controllers;
+import github.com.tiagoribeine.data.dto.PersonDTO;
 import github.com.tiagoribeine.services.PersonServices;
-import github.com.tiagoribeine.model.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,7 @@ public class PersonController {
     @GetMapping(
             produces = MediaType.APPLICATION_JSON_VALUE //Produz um Json/Lista de Json
     )
-    public List<Person> findAll(){ //Retorna todas as pessoas do Service
+    public List<PersonDTO> findAll(){ //Retorna todas as pessoas do Service
         return service.findAll();
     }
 
@@ -30,8 +30,8 @@ public class PersonController {
             value = "/{id}", //URL
             produces = MediaType.APPLICATION_JSON_VALUE //Produz um Json
     )
-    public Person findById( //Retorna uma pessoa com Id específico do Service
-            @PathVariable("id") Long id
+    public PersonDTO findById( //Retorna uma pessoa com Id específico do Service
+                               @PathVariable("id") Long id
     ){
         return service.findById(id);
     }
@@ -41,7 +41,7 @@ public class PersonController {
             consumes = MediaType.APPLICATION_JSON_VALUE, //Consome Application Json
             produces = MediaType.APPLICATION_JSON_VALUE // Produz Application Json Value
     )
-    public Person create(@RequestBody Person person){ //Cria pessoa(instancia de Person) no Service
+    public PersonDTO create(@RequestBody PersonDTO person){ //Cria pessoa(instancia de Person) no Service
         return service.create(person);
     }
 
@@ -50,7 +50,7 @@ public class PersonController {
             consumes = MediaType.APPLICATION_JSON_VALUE, //Consome Application Json
             produces = MediaType.APPLICATION_JSON_VALUE // Produz Application Json Value
     )
-    public Person update(@RequestBody Person person){
+    public PersonDTO update(@RequestBody PersonDTO person) {
         return service.update(person);
     }
 

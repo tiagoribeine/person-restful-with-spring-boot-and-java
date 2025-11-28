@@ -15,7 +15,7 @@ spring:
     #   - rest_with_spring_boot_erudio → Nome do banco de dados
     #   - useTimeZone=true&serverTimezone=UTC → Configura timezone para evitar problemas de data/hor
     username: root #usuário do MySQL
-    password: Damnation2003! #senha do MySQL
+    password: admin123 #senha do MySQL
 
   # CONFIGURAÇÕES DO JPA (Java Persistence API) - ORM
   jpa:
