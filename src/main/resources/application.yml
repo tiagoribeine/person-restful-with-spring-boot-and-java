@@ -21,7 +21,7 @@ spring:
   jpa:
     # CONFIGURAÇÕES DO HIBERNATE (implementação do JPA)
     hibernate:
-      ddl-auto: update #https://stackoverflow.com/questions/438146/what-are-the-possible-values-of-the-hibernate-hbm2ddl-auto-configuration-and-wha
+      ddl-auto: none #https://stackoverflow.com/questions/438146/what-are-the-possible-values-of-the-hibernate-hbm2ddl-auto-configuration-and-wha
       #   - Estratégia para o esquema do banco:a
       #   - update → Atualiza automaticamente as tabelas baseado nas entidades
       #   - create → Apaga e recria as tabelas toda vez

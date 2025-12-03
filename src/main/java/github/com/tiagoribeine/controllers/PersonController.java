@@ -6,10 +6,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/person") //Define a URL Base
+@RequestMapping("/api/person/v1") //Define a URL Base
 public class PersonController {
 
 

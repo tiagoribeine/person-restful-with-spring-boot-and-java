@@ -1,19 +1,31 @@
 package github.com.tiagoribeine.data.dto;
 
+//import com.fasterxml.jackson.annotation.JsonIgnore;
+//import com.fasterxml.jackson.annotation.JsonProperty;
+//import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Objects;
 
-
 public class PersonDTO implements Serializable {
-
 
     private static final long serialVersionUID = 1L; //Número da versão para controle durante a serialização
 
     //Atributos
     private Long id;
+
     private String firstName;
+
     private String lastName;
+
     private String address;
+
     private String gender;
 
     public PersonDTO() {} //Construtor - Spring Data JPA e frameworks de serialização exigem construtor vazio
@@ -59,15 +71,15 @@ public class PersonDTO implements Serializable {
         this.gender = gender;
     }
 
-    //Gerando o Equals and HashCode: Botão Direito >> Generate >> Equals and HashCode
     @Override
-    public boolean equals(Object o) { //Compara se dois objetos são iguais baseado nos valores de seus atributos
-        if (!(o instanceof PersonDTO person)) return false;
-        return Objects.equals(getId(), person.getId()) && Objects.equals(getFirstName(), person.getFirstName()) && Objects.equals(getLastName(), person.getLastName()) && Objects.equals(getAddress(), person.getAddress()) && Objects.equals(getGender(), person.getGender());
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        PersonDTO personDTO = (PersonDTO) o;
+        return Objects.equals(getId(), personDTO.getId()) && Objects.equals(getFirstName(), personDTO.getFirstName()) && Objects.equals(getLastName(), personDTO.getLastName()) && Objects.equals(getAddress(), personDTO.getAddress()) && Objects.equals(getGender(), personDTO.getGender());
     }
 
     @Override
-    public int hashCode() { //Gera um código único baseado nos atributos
+    public int hashCode() {
         return Objects.hash(getId(), getFirstName(), getLastName(), getAddress(), getGender());
     }
 }

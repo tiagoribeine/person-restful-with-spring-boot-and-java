@@ -3,10 +3,12 @@ package github.com.tiagoribeine.controllers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 //Marca como Controller REST - expõe endpoints HTTP
 @RestController
+@RequestMapping("/api/test/v1")
 public class TestLogController {
 
     // Cria um logger específico para esta classe usando SLF4J + Logback. SLF4J é a interface, Logback é a implementação (padrão do Spring Boot)

@@ -49,6 +49,16 @@
         </dependency>
 
         <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-mysql</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId> <!-- Spring Boot Test - testes automatizados -->
             <scope>test</scope>    <!-- Só usado em testes -->
@@ -70,6 +80,30 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId><!-- Plugin Spring Boot - cria JAR executável -->
+            </plugin>
+
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-core</artifactId>
+                <configuration>
+                    <url>jdbc:mysql://localhost:3306/rest_with_spring_boot_erudio?useTimeZone=true&amp;serverTimezone=UTC</url>
+                    <user>root</user>
+                    <password>admin123</password>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.mysql</groupId>
+                        <artifactId>mysql-connector-j</artifactId> <!-- Dependência do MySQL. Não especificar versão, Spring define automaticamente -->
+                        <version>9.1.0</version>
+                        <exclusions>
+                            <exclusion>
+                                <groupId>org.slf4j</groupId>
+                                <artifactId>slf4j-api</artifactId>
+                            </exclusion>
+                        </exclusions>
+                    </dependency>
+                </dependencies>
+
             </plugin>
         </plugins>
     </build>
