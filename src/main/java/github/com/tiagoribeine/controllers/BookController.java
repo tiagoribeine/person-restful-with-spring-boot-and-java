@@ -1,31 +1,24 @@
 package github.com.tiagoribeine.controllers;
-import github.com.tiagoribeine.controllers.docs.PersonControllerDocs;
-import github.com.tiagoribeine.data.dto.PersonDTO;
-import github.com.tiagoribeine.model.Person;
-import github.com.tiagoribeine.services.PersonServices;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import github.com.tiagoribeine.controllers.docs.BookControllerDocs;
+import github.com.tiagoribeine.data.dto.BookDTO;
+import github.com.tiagoribeine.services.BookServices;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/person/v1") //Define a URL Base
-@Tag(name = "People", description = "Endpoints for Managing People") //Organiza e documenta os endpoints no Swagger UI - Nome da tag (aparece no menu lateral do Swagger) -
-public class PersonController implements PersonControllerDocs {
+@RequestMapping("/api/book/v1") //Define a URL Base
+@Tag(name = "Book", description = "Endpoints for Managing Book") //Organiza e documenta os endpoints no Swagger UI - Nome da tag (aparece no menu lateral do Swagger) -
+public class BookController implements BookControllerDocs {
 
 
     @Autowired //Faz com que o Spring Boot injete a instância dessa classe quando for necessário
-    private PersonServices service; //Indica que o service desse controlador é o PersonService. Esta variável receberá um PersonServices
-    //private PersonServices service = new PersonServices(); Quando não há injeção de dependências
+    private BookServices service; //Indica que o service desse controlador é o BookService. Esta variável receberá um BookServices
+    //private BookServices service = new BookServices(); Quando não há injeção de dependências
 
     //Find all
     @GetMapping(
@@ -35,7 +28,7 @@ public class PersonController implements PersonControllerDocs {
                     MediaType.APPLICATION_YAML_VALUE}//Produz um Json/Lista de Json
     )
     @Override
-    public List<PersonDTO> findAll(){ //Retorna todas as pessoas do Service
+    public List<BookDTO> findAll(){ //Retorna todas as pessoas do Service
         return service.findAll();
     }
 
@@ -49,7 +42,7 @@ public class PersonController implements PersonControllerDocs {
     )
 
     @Override
-    public PersonDTO findById( //Retorna uma pessoa com Id específico do Service
+    public BookDTO findById( //Retorna uma pessoa com Id específico do Service
                                @PathVariable("id") Long id
     ){
         return service.findById(id);
@@ -68,8 +61,8 @@ public class PersonController implements PersonControllerDocs {
     )
 
     @Override
-    public PersonDTO create(@RequestBody PersonDTO person){ //Cria pessoa(instancia de Person) no Service
-        return service.create(person);
+    public BookDTO create(@RequestBody BookDTO book){ //Cria pessoa(instancia de Book) no Service
+        return service.create(book);
     }
 
     //Update
@@ -84,8 +77,8 @@ public class PersonController implements PersonControllerDocs {
                     MediaType.APPLICATION_YAML_VALUE} // Produz Application Json Value
     )
     @Override
-    public PersonDTO update(@RequestBody PersonDTO person) {
-        return service.update(person);
+    public BookDTO update(@RequestBody BookDTO book) {
+        return service.update(book);
     }
 
     //Delete
