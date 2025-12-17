@@ -4,7 +4,7 @@
 
 A RESTful API for Person management with modern Spring Boot features.
 
-## 🚀 Features (Implemented)
+## Features (Implemented)
 - RESTful endpoints for Person CRUD
 - DTO pattern implementation
 - Swagger/OpenAPI 3 documentation
