@@ -21,7 +21,7 @@ A RESTful API for Person management with modern Spring Boot features.
 - Maven
 - H2 Database (development)
 
-## 🛠️ Getting Started
+## Getting Started
 
 ### Prerequisites
 - Java 17 or higher
