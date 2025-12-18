@@ -1,7 +1,9 @@
 # CONFIGURAÇÃO PRINCIPAL DO SPRING BOOT
 
 server:
-  port = 8888 #Em qual porta inicializaremos - Por padrão os testes devem ser apontados para a porta 8888
+  port: 8888 #Em qual porta inicializaremos - Por padrão os testes devem ser apontados para a porta 8888
+  cors: #Adicionando o CORS globamente
+    originPatterns: http://localhost:8080,http://localhost:3000,https://www.erudio.com.br
 
 spring:
   # IDENTIFICAÇÃO DA APLICAÇÃO
@@ -30,6 +32,7 @@ spring:
         #dialect: org.hibernate.dialect.MySQL8Dialect
         # ↑ - "Dialeto" do banco - diz ao Hibernate como gerar SQL específico para MySQL 8+
         #   -  Cada banco (MySQL, PostgreSQL, Oracle) tem SQL ligeiramente diferente
+
 
     show-sql: false
     # ↑ - Exibe no console os comandos SQL gerados pelo Hibernate:

@@ -1,7 +1,7 @@
 package github.com.tiagoribeine.controllers;
 import github.com.tiagoribeine.controllers.docs.PersonControllerDocs;
 import github.com.tiagoribeine.data.dto.PersonDTO;
-import github.com.tiagoribeine.unittests.services.PersonServices;
+import github.com.tiagoribeine.services.services.PersonServices;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+// @CrossOrigin(origins = "http://localhost:8080") //Dominio da API - Se não for específicado, será permitido o acesso de todos os locais desde que esteja autenticado
 @RestController
 @RequestMapping("/api/person/v1") //Define a URL Base
 @Tag(name = "People", description = "Endpoints for Managing People") //Organiza e documenta os endpoints no Swagger UI - Nome da tag (aparece no menu lateral do Swagger) -
@@ -33,6 +34,7 @@ public class PersonController implements PersonControllerDocs {
     }
 
     //Find by Id
+    //@CrossOrigin(origins = "http://localhost:8080")
     @GetMapping(
             value = "/{id}", //URL
             produces = {
@@ -49,6 +51,7 @@ public class PersonController implements PersonControllerDocs {
     }
 
     //Create
+//@CrossOrigin(origins = {"http://localhost:8080", "https://www.erudio.com.br"})
     @PostMapping(
             consumes = {
                     MediaType.APPLICATION_JSON_VALUE,

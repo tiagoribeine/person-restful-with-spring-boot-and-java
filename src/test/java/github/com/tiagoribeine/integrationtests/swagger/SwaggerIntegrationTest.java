@@ -9,22 +9,25 @@ import static io.restassured.RestAssured.given;
 import static junit.framework.TestCase.assertTrue;
 
 @SpringBootTest(
-        webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT,
-        properties = "server.port=8888")
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+        properties = {
+                "server.port=8888",
+                "cors.originPatterns=http://localhost:3000,http://localhost:8080"
+        })
 class SwaggerIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     void shouldDisplaySwaggerUIPage() {
         var content = given()
-                .basePath("/swagger-ui/index.html")
+            .basePath("/swagger-ui/index.html")
                 .port(TestConfigs.SERVER_PORT)
-                .when()
+            .when()
                 .get()
-                .then()
+            .then()
                 .statusCode(200)
-                .extract()
+            .extract()
                 .body()
-                .asString();
+                    .asString();
         assertTrue(content.contains("Swagger UI"));
     }
 

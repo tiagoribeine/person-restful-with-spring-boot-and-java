@@ -1,5 +1,7 @@
 # CONFIGURAÇÃO PRINCIPAL DO SPRING BOOT
 
+cors: #Adicionando o CORS globalmente
+  originPatterns: http://localhost:8080,http://localhost:3000,https://www.erudio.com.br
 spring:
   # IDENTIFICAÇÃO DA APLICAÇÃO
   application:
@@ -27,7 +29,7 @@ spring:
       #   - create → Apaga e recria as tabelas toda vez
       #   - validate → Só valida se esquema coincide com entidades
       #   - none → Não faz nada (esquema manual)
-      #   ⚠️ EM PRODUÇÃO: usar 'validate' ou 'none' para evitar perda de dados!
+      #   - Em Produção: usar 'validate' ou 'none' para evitar perda de dados!
 
     # PROPRIEDADES ESPECÍFICAS DO HIBERNATE
     properties:

@@ -4,6 +4,7 @@ import github.com.tiagoribeine.data.dto.PersonDTO;
 import github.com.tiagoribeine.exception.RequiredObjectIsNullException;
 import github.com.tiagoribeine.model.Person;
 import github.com.tiagoribeine.repository.PersonRepository;
+import github.com.tiagoribeine.services.services.PersonServices;
 import github.com.tiagoribeine.unittests.mapper.mocks.MockPerson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -5,6 +5,7 @@ import github.com.tiagoribeine.data.dto.BookDTO;
 import github.com.tiagoribeine.exception.RequiredObjectIsNullException;
 import github.com.tiagoribeine.model.Book;
 import github.com.tiagoribeine.repository.BookRepository;
+import github.com.tiagoribeine.services.services.BookServices;
 import github.com.tiagoribeine.unittests.mapper.mocks.MockBook;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

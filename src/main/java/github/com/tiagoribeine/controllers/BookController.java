@@ -1,7 +1,7 @@
 package github.com.tiagoribeine.controllers;
 import github.com.tiagoribeine.controllers.docs.BookControllerDocs;
 import github.com.tiagoribeine.data.dto.BookDTO;
-import github.com.tiagoribeine.unittests.services.BookServices;
+import github.com.tiagoribeine.services.services.BookServices;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
