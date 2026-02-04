@@ -1,0 +1,105 @@
+# CONFIGURAÇÃO PRINCIPAL DO SPRING BOOT
+
+cors: #Adicionando o CORS globalmente
+  originPatterns: http://localhost:8080,http://localhost:3000,https://www.erudio.com.br
+file:
+  upload-dir: /UploadDir #Onde será salvo os arquivos na máquina
+
+security:
+  jwt:
+    token:
+      #Configurações de geração do Token
+      secret-key: ${SECRET_KEY} #Chave secreta para assinar e verificar os tokens JWT
+      expire-length: 3600000 #1 hora
+
+email:
+  subject: "Default Subject"
+  message: "Default Message"
+
+spring:
+  # IDENTIFICAÇÃO DA APLICAÇÃO
+  application:
+    name: rest-with-spring-boot-and-java-erudio
+
+  # CONFIGURAÇÃO DO BANCO DE DADOS MYSQL
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver #Classe do driver JDBC para conectar com MySQL
+    url: jdbc:mysql://localhost:3306/rest_with_spring_boot_erudio?createDatabaseIfNotExist=true&useTimeZone=true&serverTimezone=UTC
+    # ↑ - URL de conexão com o banco:
+    #   - jdbc:mysql:// → Protocolo JDBC para MySQL
+    #   - localhost:3306 → Servidor e porta do MySQL
+    #   - rest_with_spring_boot_erudio → Nome do banco de dados
+    #   - useTimeZone=true&serverTimezone=UTC → Configura timezone para evitar problemas de data/hor
+    username: ${DB_USERNAME} #usuário do MySQL
+    password: ${DB_PASSWORD} #senha do MySQL
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+
+  # CONFIGURAÇÕES DO JPA (Java Persistence API) - ORM
+  jpa:
+    # CONFIGURAÇÕES DO HIBERNATE (implementação do JPA)
+    hibernate:
+      ddl-auto: none #https://stackoverflow.com/questions/438146/what-are-the-possible-values-of-the-hibernate-hbm2ddl-auto-configuration-and-wha
+      #   - Estratégia para o esquema do banco:a
+      #   - update → Atualiza automaticamente as tabelas baseado nas entidades
+      #   - create → Apaga e recria as tabelas toda vez
+      #   - validate → Só valida se esquema coincide com entidades
+      #   - none → Não faz nada (esquema manual)
+      #   - Em Produção: usar 'validate' ou 'none' para evitar perda de dados!
+
+    # PROPRIEDADES ESPECÍFICAS DO HIBERNATE
+    properties:
+      hibernate:
+        #dialect: org.hibernate.dialect.MySQL8Dialect
+        # ↑ - "Dialeto" do banco - diz ao Hibernate como gerar SQL específico para MySQL 8+
+        #   -  Cada banco (MySQL, PostgreSQL, Oracle) tem SQL ligeiramente diferente
+  mail: #Nivel de 1x tab
+    host: smtp.gmail.com
+    port: 587
+    username: ${EMAIL_USERNAME} #Variável de ambiente - Informar email/senha no application.yml é falha grave de segurança
+    password: ${EMAIL_PASSWORD}
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enabled: true
+      mail.smtp.starttls.required: true
+
+
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 2KB #Tamanho do Multipart(tijolos)
+      max-file-size: 200MB #Tamanho máximo de arquivos que aceitaremos o upload - Depende da regra de negócio
+      max-request-size: 215MB #Máximo de download permitidos
+
+    show-sql: false
+    # ↑ - Exibe no console os comandos SQL gerados pelo Hibernate:
+    #   - true → Mostra SQL (útil para desenvolvimento/debug)
+    #   - false → Não mostra SQL (melhor para produção)
+
+    open-in-view: false
+    #   - Controla se a sessão do banco fica aberta durante toda a requisição HTTP:
+    #   - true → Sessão aberta (pode causar problemas de performance)
+    #   - false → Sessão fecha após cada operação
+
+logging:
+  level:
+    root: INFO #WARN #Logg em nivel global
+    import net.sf.jasperreports.engine.*: TRACE
+    github.com.tiagoribeine: DEBUG #Pacote que queremos investigar em nivel DEBUG . Restante rodara em INFO.
+
+springdoc:
+  paths-to-match:
+    - /api/**/v1/**
+    - /auth/**
+  swagger-ui:
+    user-root-path: true
+
+
+
+
+
+
+
+
