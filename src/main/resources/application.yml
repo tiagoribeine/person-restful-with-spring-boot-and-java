@@ -1,7 +1,7 @@
 # CONFIGURAÇÃO PRINCIPAL DO SPRING BOOT
 
 cors: #Adicionando o CORS globalmente
-  originPatterns: http://localhost:8080,http://localhost:3000,https://www.erudio.com.br
+  originPatterns: ${CORS_ORIGINAL_PATTERNS:http://localhost:8080,http://localhost:3000}
 file:
   upload-dir: /UploadDir #Onde será salvo os arquivos na máquina
 
@@ -9,12 +9,12 @@ security:
   jwt:
     token:
       #Configurações de geração do Token
-      secret-key: ${SECRET_KEY} #Chave secreta para assinar e verificar os tokens JWT
+      secret-key: ${SECRET_KEY:default_dev_secret_change_me} #Chave secreta para assinar e verificar os tokens JWT
       expire-length: 3600000 #1 hora
 
 email:
-  subject: "Default Subject"
-  message: "Default Message"
+  subject: ${EMAIL_SUBJECT}
+  message: ${EMAIL_MESSAGE}
 
 spring:
   # IDENTIFICAÇÃO DA APLICAÇÃO
@@ -24,7 +24,7 @@ spring:
   # CONFIGURAÇÃO DO BANCO DE DADOS MYSQL
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver #Classe do driver JDBC para conectar com MySQL
-    url: jdbc:mysql://localhost:3306/rest_with_spring_boot_erudio?createDatabaseIfNotExist=true&useTimeZone=true&serverTimezone=UTC
+    url: ${DB_URL:jdbc:mysql://localhost:3306/rest_with_spring_boot_erudio?createDatabaseIfNotExist=true}
     # ↑ - URL de conexão com o banco:
     #   - jdbc:mysql:// → Protocolo JDBC para MySQL
     #   - localhost:3306 → Servidor e porta do MySQL
