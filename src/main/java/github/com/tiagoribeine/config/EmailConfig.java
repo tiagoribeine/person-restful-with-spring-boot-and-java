@@ -77,4 +77,5 @@ public class EmailConfig {
     public int hashCode() {
         return Objects.hash(getHost(), getPort(), getUsername(), getPassword(), getFrom(), isSsl());
     }
+
 }
