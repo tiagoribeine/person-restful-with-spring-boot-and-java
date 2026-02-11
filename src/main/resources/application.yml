@@ -1,9 +1,10 @@
 # CONFIGURAÇÃO PRINCIPAL DO SPRING BOOT
-
+server:
+  port: 80
 cors: #Adicionando o CORS globalmente
   originPatterns: ${CORS_ORIGINAL_PATTERNS:http://localhost:8080,http://localhost:3000}
 file:
-  upload-dir: /UploadDir #Onde será salvo os arquivos na máquina
+  upload-dir: ${UPLOAD_DIR} #Onde será salvo os arquivos na máquina
 
 security:
   jwt:
@@ -24,14 +25,14 @@ spring:
   # CONFIGURAÇÃO DO BANCO DE DADOS MYSQL
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver #Classe do driver JDBC para conectar com MySQL
-    url: ${DB_URL:jdbc:mysql://localhost:3306/rest_with_spring_boot_erudio?createDatabaseIfNotExist=true}
+    url: ${SPRING_DATASOURCE_URL}
     # ↑ - URL de conexão com o banco:
     #   - jdbc:mysql:// → Protocolo JDBC para MySQL
     #   - localhost:3306 → Servidor e porta do MySQL
     #   - rest_with_spring_boot_erudio → Nome do banco de dados
     #   - useTimeZone=true&serverTimezone=UTC → Configura timezone para evitar problemas de data/hor
-    username: ${DB_USERNAME} #usuário do MySQL
-    password: ${DB_PASSWORD} #senha do MySQL
+    username: ${MYSQL_USER} #usuário do MySQL
+    password: ${MYSQL_PASSWORD} #senha do MySQL
 
   flyway:
     enabled: true

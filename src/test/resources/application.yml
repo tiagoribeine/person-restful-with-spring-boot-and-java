@@ -4,12 +4,12 @@ server:
 cors:
   originPatterns: http://localhost:8080,http://localhost:3000,https://www.erudio.com.br
 file:
-  upload-dir: /Code/UploadDir
+  upload-dir: ${UPLOAD_DIR_TEST}
 security:
   jwt:
     token:
       #Configurações de geração do Token
-      secret-key: 53cr37 #Chave secreta para assinar e verificar os tokens JWT
+      secret-key: ${SECRET_KEY:test_secret_only_for_unit_tests} #Chave secreta para assinar e verificar os tokens JWT
       expire-length: 3600000 #1 hora
 
 

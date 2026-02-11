@@ -1,7 +1,7 @@
 package github.com.tiagoribeine.config;
 
 public interface TestConfigs {
-    int SERVER_PORT = 8888;
+    int SERVER_PORT = 80; //Apontando os testes de integração para o Container utilizando a mesma porta
 
     String HEADER_PARAM_AUTHORIZATION = "Authorization";
     String HEADER_PARAM_ORIGIN = "Origin";

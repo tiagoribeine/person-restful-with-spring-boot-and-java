@@ -15,25 +15,15 @@ import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.TestPropertySource;
 
 import static io.restassured.RestAssured.given;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest(
-        webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT,
-        properties = {
-                "server.port=8888",
-                "cors.originPatterns=http://localhost:3000,http://localhost:8080,https://www.erudio.com.br"
-        })
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@TestPropertySource(properties = {
-        "file.upload_dir=./test-uploads"  // ← ADICIONA ISSO AQUI!
-})
 class PersonControllerCorsTest extends AbstractIntegrationTest {
 
     private static RequestSpecification specification;
@@ -42,9 +32,6 @@ class PersonControllerCorsTest extends AbstractIntegrationTest {
     private static PersonDTO person;
     private static TokenDTO tokenDto;
 
-    @LocalServerPort
-    private int port;
-
     @BeforeAll
     static void setUp() {
         objectMapper = new ObjectMapper();
@@ -52,7 +39,6 @@ class PersonControllerCorsTest extends AbstractIntegrationTest {
 
         person = new PersonDTO();
         tokenDto = new TokenDTO();
-
     }
 
     @Test
@@ -63,7 +49,7 @@ class PersonControllerCorsTest extends AbstractIntegrationTest {
 
         tokenDto = given()
                 .basePath("/auth/signin")
-                .port(port)
+                .port(TestConfigs.SERVER_PORT)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(credentials)
                 .when()
@@ -84,7 +70,7 @@ class PersonControllerCorsTest extends AbstractIntegrationTest {
         mockPerson();
 
         specification = new RequestSpecBuilder()
-                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_ERUDIO)
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, "http://localhost:8080")
                 .addHeader(TestConfigs.HEADER_PARAM_AUTHORIZATION, "Bearer " + tokenDto.getAccessToken())
                 .setBasePath("/api/person/v1")
                 .setPort(TestConfigs.SERVER_PORT)
@@ -128,8 +114,8 @@ class PersonControllerCorsTest extends AbstractIntegrationTest {
 
         specification = new RequestSpecBuilder()
                 .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_SEMERU)
-                .setBasePath("/api/person/v1")
                 .addHeader(TestConfigs.HEADER_PARAM_AUTHORIZATION, "Bearer " + tokenDto.getAccessToken())
+                .setBasePath("/api/person/v1")
                 .setPort(TestConfigs.SERVER_PORT)
                 .addFilter(new RequestLoggingFilter(LogDetail.ALL))
                 .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
@@ -155,8 +141,8 @@ class PersonControllerCorsTest extends AbstractIntegrationTest {
     void findById() throws JsonProcessingException {
         specification = new RequestSpecBuilder()
                 .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_LOCAL)
-                .setBasePath("/api/person/v1")
                 .addHeader(TestConfigs.HEADER_PARAM_AUTHORIZATION, "Bearer " + tokenDto.getAccessToken())
+                .setBasePath("/api/person/v1")
                 .setPort(TestConfigs.SERVER_PORT)
                 .addFilter(new RequestLoggingFilter(LogDetail.ALL))
                 .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
@@ -195,8 +181,8 @@ class PersonControllerCorsTest extends AbstractIntegrationTest {
     void findByIdWithWrongOrigin() throws JsonProcessingException {
         specification = new RequestSpecBuilder()
                 .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_SEMERU)
-                .setBasePath("/api/person/v1")
                 .addHeader(TestConfigs.HEADER_PARAM_AUTHORIZATION, "Bearer " + tokenDto.getAccessToken())
+                .setBasePath("/api/person/v1")
                 .setPort(TestConfigs.SERVER_PORT)
                 .addFilter(new RequestLoggingFilter(LogDetail.ALL))
                 .addFilter(new ResponseLoggingFilter(LogDetail.ALL))

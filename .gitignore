@@ -43,3 +43,9 @@ blog/bin/
 hs_err_pid*
 /.metadata/
 /old/
+
+#folders
+auxiliar/
+
+#Environment Variables
+.env
