@@ -5,6 +5,7 @@ cors: #Adicionando o CORS globalmente
   originPatterns: ${CORS_ORIGINAL_PATTERNS:http://localhost:8080,http://localhost:3000}
 file:
   upload-dir: ${UPLOAD_DIR} #Onde será salvo os arquivos na máquina
+  #upload-dir: ${java.io.tmpdir}/UploadDir
 
 security:
   jwt:

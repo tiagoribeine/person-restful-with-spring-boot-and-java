@@ -4,7 +4,9 @@ server:
 cors:
   originPatterns: http://localhost:8080,http://localhost:3000,https://www.erudio.com.br
 file:
-  upload-dir: ${UPLOAD_DIR_TEST}
+  #upload-dir: ${UPLOAD_DIR_TEST}
+  upload-dir: ${java.io.tmpdir}/UploadDir #Onde será salvo os arquivos na máquina
+
 security:
   jwt:
     token:
