@@ -2,6 +2,8 @@ This project was developed as a **hands-on study project** focused on mastering 
 
 <h1> Person API </h1>
 
+![CI/CD Status](https://github.com/tiagoribeine/new-rest-with-spring-boot-and-java-erudio/actions/workflows/continuous-deployment.yml/badge.svg)
+
 <h2> Status: Work in Progress </h2> 
 
 A RESTful API for Person management developed as a practice project to master modern Spring Boot features, RESTful principles, and industry best practices.
@@ -33,11 +35,11 @@ The application is configured to **automatically create everything** on first ru
 
 <h3>Set Environment Variables </h3>
 
-DB_USERNAME= `your_db_username`
-DB_PASSWORD= `your_db_password`
-SECRET_KEY= `your-256-bit-secret-key-here-minimum-256-bits`
-EMAIL_USERNAME= `your-email@gmail.com`   # Optional - for email features
-EMAIL_PASSWORD= `your-google-api-key`    # Optional - for email features
+- DB_USERNAME= `your_db_username`
+- DB_PASSWORD= `your_db_password`
+- SECRET_KEY= `your-256-bit-secret-key-here-minimum-256-bits`
+- EMAIL_USERNAME= `your-email@gmail.com`   # Optional - for email features
+- EMAIL_PASSWORD= `your-google-api-key`    # Optional - for email features
 
 <h2> Authentication</h2>
 
@@ -126,6 +128,8 @@ Configure upload directory in <code>application.properties</code>:
 <h2>Tech Stack</h2>
 
 - Java 17+
+- Docker & Docker Compose
+- GitHub Actions (CI/CD Pipeline)
 - Spring Boot 3.4.0
 - Spring Data JPA
 - Spring Security
@@ -157,6 +161,19 @@ Configure upload directory in <code>application.properties</code>:
 - Swagger UI: http://localhost:8080/swagger-ui/index.html
 - API Docs (JSON): http://localhost:8080/v3/api-docs
 - API Docs (YAML): http://localhost:8080/v3/api-docs.yaml
+  DevOps & Automation
+
+### CI/CD Pipeline
+This project features a fully automated **Continuous Integration and Delivery** pipeline via GitHub Actions. Every push to the `main` branch triggers:
+1. **Build**: Maven compiles the code and runs verification.
+2. **Dockerize**: A production-ready Docker image is built using the `Dockerfile`.
+3. **Registry**: The image is automatically pushed to **Docker Hub** with dual tagging:
+    - `latest`: Always points to the most recent stable build.
+    - `run_id`: Specific versioning based on the GitHub Action run for easy rollbacks.
+
+### Docker Hub Repository
+You can find the latest images here:
+[tiagoribeine/new-rest-with-spring-boot-and-java-erudio](https://hub.docker.com/r/tiagoribeine/new-rest-with-spring-boot-and-java-erudio)
 
 <h2>Getting Started</h2>
 
@@ -182,6 +199,15 @@ docker run -d \
 
 # Wait for MySQL to initialize
 sleep 10</code></pre>
+
+<h3>Step 2: Spin up the environment</h3>
+
+**Using Docker Compose (Fastest way)**
+Instead of manual setup, you can start the entire stack (Database + API) with a single command:
+
+<pre><code>docker compose up -d</code></pre>
+
+This will pull the MySQL 9.1.0 image, set up the network, and start the Person API.
 
 <h3>Step 3: Build the Project</h3>
 <pre><code>mvn clean install</code></pre>
