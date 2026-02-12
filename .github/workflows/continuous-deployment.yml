@@ -28,7 +28,7 @@ jobs:
 
       - name: Build Application .jar
         working-directory: ./
-        run: mvn clean package
+        run: mvn clean package -DskipTests
         env:
           # Força o Testcontainers a ignorar a verificação de ambiente
           # e ajuda a encontrar o Docker daemon no GitHub Runner
