@@ -26,22 +26,24 @@ jobs:
           distribution: 'adopt'
           cache: maven
 
-
       - name: Build Application .jar
         working-directory: ./
-        run: mvn clean package #-DskipTests #Constroi o .jar
-
+        run: mvn clean package
+        env:
+          # Força o Testcontainers a ignorar a verificação de ambiente
+          # e ajuda a encontrar o Docker daemon no GitHub Runner
+          TESTCONTAINERS_RYUK_DISABLED: true
+          DOCKER_HOST: unix:///var/run/docker.sock
 
       - name: Docker Compose Build
         working-directory: ./ #Comando deve ser executado onde está o docker composer yml - Por isso voltaremos um diretório
         run: docker compose build
 
-
       - name: Push to Docker Hub Container Registry
         run: |
           docker tag ${{ secrets.DOCKER_USERNAME }}/new-rest-with-spring-boot-and-java-erudio:latest ${{ secrets.DOCKER_USERNAME }}/new-rest-with-spring-boot-and-java-erudio:${{ github.run_id }}          
           docker push ${{ secrets.DOCKER_USERNAME }}/new-rest-with-spring-boot-and-java-erudio:latest  
-          docker push ${{ secrets.DOCKER_USERNAME }}/new-rest-with-spring-boot-and-java-erudio:${{ github.run_id }}  
+          docker push ${{ secrets.DOCKER_USERNAME }}/new-rest-with-spring-boot-and-java-erudio:${{ github.run_id }}
           
           
           
