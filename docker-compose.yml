@@ -1,59 +1,57 @@
-#version: '3.4' #Definindo a versão - Atributo obsoleto
-
-#Definindo os containers
 services:
-  db: #Database
-    image: mysql:9.1.0 #Base image que será utilizado - Versão do MySQL extraída do DockerHub
-    #command: mysql --default-authentication-plugin=mysql_native_password #Comando que será executado assim que iniciar a Base Image
-    
-    
-    healthcheck:  # 
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"] #Verifica se o SQL está respondendo.
-      interval: 10s #Intervalo entre verificações de saúde
-      timeout: 5s #Tempo máximo para o comando de healthcheck executar
-      retries: 10 #Se falhar uma vez, tenta mais 9 vezes antes de desistir
-      start_period: 30s #Período de inicialização onde falhas são ignoradas
-
-    #Variáveis de Ambiente
+  db:
+    image: mysql:9.1.0
+    container_name: mysql-db
+    restart: always
     environment:
-      TZ: America/Sao_Paulo #Time Zone
-      MYSQL_ROOT_PASSWORD: admin123 #Em um ambiente de produção deve ser usado uma senha mais robusta
-      MYSQL_USER: root
-      MYSQL_PASSWORD: admin123
-      MYSQL_DATABASE: rest_with_spring_boot_erudio #Nome do banco
-
-    ports: #Portas expostas
-      - "3308:3306" #Esquerda a porta do host e direita a porta do hospedeiro
-    expose:
-      - 3306
+      TZ: America/Sao_Paulo
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    ports:
+      - "3308:3306"
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p$MYSQL_ROOT_PASSWORD"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
     networks:
       - erudio-network
 
-  rest-with-spring-boot-erudio: #Container baseado no wordpress
+  rest-with-spring-boot-erudio:
     image: tiagoribeine/new-rest-with-spring-boot-and-java-erudio
+    build: .
     restart: always
-    build: . #./Pasta do Projeto - Construirá o Dockerfile apartir do que será achado nesse caminho
-    #working_dir: ./${PROJECT_NAME} #./Pasta do Projeto - Construirá o Dockerfile apartir do que será achado nesse caminho
+    # O entrypoint garante que o sleep 20 aconteça antes do Java tentar conectar
+    entrypoint: ["sh", "-c", "sleep 20 && java -jar /app.jar"]
     environment:
       TZ: America/Sao_Paulo
-      #SPRING_APPLICATION_DATASOURCE_URL: ${DB_URL}
-      #SPRING_APPLICATION_DATASOURCE_URL: jdbc:mysql://db:3306/rest_with_spring_boot_erudio?useTimezone=true&serverTimezone=UTC
-      #SPRING_APPLICATION_DATASOURCE_USERNAME: root
-      #SPRING_APPLICATION_DATASOURCE_PASSWORD: admin123
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/rest_with_spring_boot_erudio?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: admin123   
-
-    #command: mvn spring-boot:run #Comando que será executado no container assim que começar a subir a stack
-    command: java -jar app.jar 
-
-    depends_on: #Se depende de algum outro serviço - no caso de um outro container
-      - db #Depende do db
+      # Importante: a URL deve usar 'db' como host, que é o nome do serviço acima
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/${MYSQL_DATABASE}?useSSL=false&allowPublicKeyRetrieval=true&autoReconnect=true
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+    depends_on:
+      db:
+        condition: service_healthy
     ports:
       - "80:80"
-
     networks:
-      - erudio-network #rede que o wordpress usará - Não é obrigatório
+      - erudio-network
+
+  portainer:
+    image: portainer/portainer-ce:latest
+    restart: always
+    ports:
+      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    networks:
+      - erudio-network
+
+volumes:
+  portainer_data:
+
 networks:
-  erudio-network: #nome da rede criada entre os containers Wordpress Service e MySQl Service
-    driver: bridge #driver a ser utilizado
+  erudio-network:
+    driver: bridge
