@@ -26,7 +26,7 @@ spring:
   # CONFIGURAÇÃO DO BANCO DE DADOS MYSQL
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver #Classe do driver JDBC para conectar com MySQL
-    url: ${SPRING_DATASOURCE_URL}
+    url: ${AWS_DATABASE_URL}
     # ↑ - URL de conexão com o banco:
     #   - jdbc:mysql:// → Protocolo JDBC para MySQL
     #   - localhost:3306 → Servidor e porta do MySQL
