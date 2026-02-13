@@ -1,258 +1,126 @@
-This project was developed as a **hands-on study project** focused on mastering **Spring Boot**, **Spring Security**, and modern REST API best practices, while maintaining production-level code quality.
+# Person API - Spring Boot 3 & Dockerized Environment
+
+[![CI/CD Status](https://github.com/tiagoribeine/new-rest-with-spring-boot-and-java-erudio/actions/workflows/continuous-deployment.yml/badge.svg)](https://github.com/tiagoribeine/new-rest-with-spring-boot-and-java-erudio/actions)
 
-<h1> Person API </h1>
+This project was developed as a **hands-on study project** focused on mastering **Spring Boot 3**, **Spring Security**, and modern REST API best practices, while maintaining production-level code quality.
+
+> **Status:** Work in Progress 🛠️
 
-![CI/CD Status](https://github.com/tiagoribeine/new-rest-with-spring-boot-and-java-erudio/actions/workflows/continuous-deployment.yml/badge.svg)
+## 🚀 Features (Implemented)
+
+- **RESTful CRUD**: Full management for Person entities.
+- **DTO Pattern**: Clean separation between data transfer and persistence.
+- **Swagger/OpenAPI 3**: Interactive documentation.
+- **HATEOAS**: Implementation of hypermedia links for API navigability.
+- **Content Negotiation**: Support for JSON, XML, and YAML.
+- **Flyway Migrations**: Automated database versioning.
+- **Security**: JWT-based authentication (Access & Refresh Tokens).
+- **File Management**: Secure Upload/Download features.
+- **Advanced Search**: Pagination, sorting, and filtering with Spring Data JPA.
+- **CORS**: Configurable origin patterns for cross-origin requests.
 
-<h2> Status: Work in Progress </h2> 
+## 🛠️ Tech Stack
 
-A RESTful API for Person management developed as a practice project to master modern Spring Boot features, RESTful principles, and industry best practices.
+- **Java 21** (Running on Docker)
+- **Spring Boot 3.4.1**
+- **MySQL 9.1.0**
+- **Docker & Docker Compose**
+- **Flyway** (Migrations)
+- **Spring Security & JWT**
+- **Testcontainers** (Integration Tests)
+- **RestAssured** (API Testing)
+- **GitHub Actions** (CI/CD)
 
-<h2>Features (Implemented)</h2>
+---
 
-- RESTful endpoints for Person CRUD
-- DTO pattern implementation
-- Swagger/OpenAPI 3 documentation
-- HATEOAS support
-- Content Negotiation (JSON/XML/YAML)
-- Database integration with MySQL
-- Integration tests with Testcontainers
-- Containerized MySQL testing environment
-- CORS configuration with origin patterns
-- Dynamic port allocation for parallel testing
-- Test isolation with independent test cases
-- Pagination with sorting and filtering capabilities
-- Advanced query methods with Spring Data JPA specifications
-- JWT-based authentication (Access & Refresh Tokens)
+## 🐳 Quick Start (Dockerized)
 
-<h3>Automatic Setup </h3>
+The easiest way to run the entire stack (API + Database + Management UI) is using Docker Compose.
 
-The application is configured to **automatically create everything** on first run:
+### 1. Prerequisites
+- Docker & Docker Desktop installed.
+- A `.env` file in the project root (see template below).
 
-**Database** → Created automatically (`createDatabaseIfNotExist=true`)  
-**Tables** → Created via Flyway migrations  
-**Schema History** → Tracked in `flyway_schema_history`
+### 2. Set Environment Variables (`.env`)
+Create a `.env` file with these keys:
+```env
+# Database Settings
+MYSQL_ROOT_PASSWORD=admin123
+MYSQL_DATABASE=rest_with_spring_boot_erudio
 
-<h3>Set Environment Variables </h3>
+# Spring Boot Settings
+SPRING_DATASOURCE_USERNAME=root
+SPRING_DATASOURCE_PASSWORD=admin123
+SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/rest_with_spring_boot_erudio?useSSL=false&allowPublicKeyRetrieval=true&autoReconnect=true
 
-- DB_USERNAME= `your_db_username`
-- DB_PASSWORD= `your_db_password`
-- SECRET_KEY= `your-256-bit-secret-key-here-minimum-256-bits`
-- EMAIL_USERNAME= `your-email@gmail.com`   # Optional - for email features
-- EMAIL_PASSWORD= `your-google-api-key`    # Optional - for email features
+# Security & Others
+SECRET_KEY=your-256-bit-secret-key-minimum
+PORTAINER_PASSWORD=admin123456789
+CORS_ORIGINAL_PATTERNS=http://localhost:8080,http://localhost:3000
+```
 
-<h2> Authentication</h2>
+Spin up the Enviroment:
+```
+docker compose up -d
+```
 
-This API uses <strong>JWT (JSON Web Token)</strong> for stateless authentication.
+📖 Documentation & Management
+Once the containers are running:
 
-To access protected endpoints, clients must authenticate first and obtain an access token.
+- Swagger UI: http://localhost/swagger-ui/index.html
+- API Docs (JSON): http://localhost/v3/api-docs
+- Portainer (Docker UI): http://localhost:9000
+- MySQL External Access: localhost:3308 (User: root)
 
-<h3>Sign In</h3>
+🔐 Authentication
+This API uses JWT (JSON Web Token) for stateless authentication.
 
-Authenticates a user and returns an access token and a refresh token.
+Sign In
+Endpoint: POST /auth/signin
+Default Test User:
 
-<strong>Endpoint</strong>
-<pre><code>POST /auth/signin </code></pre> 
+```
+{
+    "username": "leandro", 
+    "password": "admin123"
+}
+```
 
-<strong>Request Body</strong>
+<h3> Using the Token </h3>
 
-<h1>Default Test User</h1>
-<strong>These are TEST credentials ONLY - Do not use or keep this info in production:</strong>
+Include the token in the header of protected requests:
+```
+Authorization: Bearer <your_access_token>
+```
 
-<pre><code>{
-  "username": "leandro",
-  "password": "admin123"
-}</code></pre>
+<h3> File Upload/Download </h3>
 
-<strong>Response – 200 OK</strong>
-<pre><code>{
-  "headers": {},
-  "body": {
-    "username": "leandro",
-    "authenticated": true,
-    "created": "2026-01-28T23:40:12.000+00:00",
-    "expiration": "2026-01-29T00:40:12.000+00:00",
-    "accessToken": "eyJhbGciOiJIUzI1NiJ9...",
-    "refreshToken": "eyJhbGciOiJIUzI1NiJ9..."
-  },
-  "statusCode": "OK",
-  "statusCodeValue": 200
-}</code></pre>
+- Upload Single: POST /api/file/v1/uploadFile
+- Upload Multiple: POST /api/file/v1/uploadMultipleFiles
+- Download: GET /api/file/v1/downloadFile/{fileName}
 
-<h3>Using the Access Token</h3>
+<h3> Testing Strategy </h3>
 
-For protected endpoints, include the access token in the <code>Authorization</code> header:
+- Unit Tests: JUnit 5 and Mockito.
+- Integration Tests: RestAssured + Testcontainers (spins up a real MySQL 9.1.0 container for tests).
+- Isolation: Each test suite runs in an isolated environment with dynamic port allocation.
 
-<pre><code>Authorization: Bearer &lt;accessToken&gt;</code></pre>
+To run tests locally:
+```
+mvn clean verify
+```
 
-<h3>Notes</h3>
+<h3> DevOps & Automation (CI/CD)</h3>
+Every push to the main branch triggers the GitHub Actions pipeline:
 
-- The API is stateless and does not use HTTP sessions.
-- The access token has a limited lifetime.
-- The refresh token can be used to obtain a new access token when the current one expires.
+- Verify: Runs Maven build and all integration tests.
+- Dockerize: Builds a production-ready image.
+- Push: Pushes to Docker Hub as tiagoribeine/new-rest-with-spring-boot-and-java-erudio.
 
-<h2>File Upload/Download Features</h2>
+[View Image on Docker Hub](https://hub.docker.com/r/tiagoribeine/new-rest-with-spring-boot-and-java-erudio)
 
-<h3>Upload Features</h3>
-
-- Single file upload endpoint (`POST /api/file/v1/uploadFile`)
-- Multiple files upload endpoint (`POST /api/file/v1/uploadMultipleFiles`)
-- Configurable upload directory via application properties
-- File type and size validation
-- Automatic file name generation to prevent conflicts
-- Returns download URL for uploaded files
-
-<h3>Download Features</h3>
-
-- Secure file download endpoint (`GET /api/file/v1/downloadFile/{fileName}`)
-- Path traversal protection
-- File existence validation
-- Content-Type header auto-detection
-- Content-Disposition header for browser downloads
-
-<h2>Configuration</h2>
-
-Configure upload directory in <code>application.properties</code>:
-
-<pre><code>file.upload-dir=/path/to/upload/directory</code></pre>
-
-<h2>Testing Strategy</h2>
-
-- Unit Tests: JUnit 5, Mockito
-- Integration Tests: Testcontainers, MySQL Docker containers
-- API Tests: RestAssured with detailed logging
-- Database Tests: Isolated MySQL containers per test suite
-- CORS Tests: Origin validation with positive/negative scenarios
-- Port Management: Dynamic port allocation to avoid conflicts
-
-<h2>Tech Stack</h2>
-
-- Java 17+
-- Docker & Docker Compose
-- GitHub Actions (CI/CD Pipeline)
-- Spring Boot 3.4.0
-- Spring Data JPA
-- Spring Security
-- JWT (JSON Web Token)
-- Spring HATEoAS
-- OpenAPI 3 (SpringDoc OpenAPI)
-- Maven
-- Testcontainers 1.20.4
-- MySQL 9.1.0 (test environment via Docker)
-- Flyway
-- RestAssured
-
-<h2>API Endpoints</h2>
-
-<strong>Authentication</strong>
-- `POST /auth/signin` – Authenticate user and generate JWT tokens
-
-<strong>Person</strong>
-- `GET /api/person/v1`
-- `GET /api/person/v1/{id}`
-- `POST /api/person/v1`
-- `PUT /api/person/v1`
-- `PATCH /api/person/v1/{id}`
-- `DELETE /api/person/v1/{id}`
-- `GET /api/person/v1/findPeopleByName/{firstName}`
-
-<h2>Links</h2>
-
-- Swagger UI: http://localhost:8080/swagger-ui/index.html
-- API Docs (JSON): http://localhost:8080/v3/api-docs
-- API Docs (YAML): http://localhost:8080/v3/api-docs.yaml
-  DevOps & Automation
-
-### CI/CD Pipeline
-This project features a fully automated **Continuous Integration and Delivery** pipeline via GitHub Actions. Every push to the `main` branch triggers:
-1. **Build**: Maven compiles the code and runs verification.
-2. **Dockerize**: A production-ready Docker image is built using the `Dockerfile`.
-3. **Registry**: The image is automatically pushed to **Docker Hub** with dual tagging:
-    - `latest`: Always points to the most recent stable build.
-    - `run_id`: Specific versioning based on the GitHub Action run for easy rollbacks.
-
-### Docker Hub Repository
-You can find the latest images here:
-[tiagoribeine/new-rest-with-spring-boot-and-java-erudio](https://hub.docker.com/r/tiagoribeine/new-rest-with-spring-boot-and-java-erudio)
-
-<h2>Getting Started</h2>
-
-<h3>Prerequisites</h3>
-
-- Java 17 or higher
-- Maven 3.8+
-- Docker (required for integration tests)
-- MySQL Database
-
-<h3>Step 1: Clone the Repository</h3>
-<pre><code>git clone https://github.com/tiagoribeine/person-api.git
-cd person-api</code></pre>
-
-<h3>Step 2: Start MySQL Database</h3>
-<strong>Option A: Using Docker (Recommended)</strong>
-<pre><code># Start MySQL container
-docker run -d \
-  --name person-mysql \
-  -e MYSQL_ROOT_PASSWORD=admin123 \
-  -p 3306:3306 \
-  mysql:8.0
-
-# Wait for MySQL to initialize
-sleep 10</code></pre>
-
-<h3>Step 2: Spin up the environment</h3>
-
-**Using Docker Compose (Fastest way)**
-Instead of manual setup, you can start the entire stack (Database + API) with a single command:
-
-<pre><code>docker compose up -d</code></pre>
-
-This will pull the MySQL 9.1.0 image, set up the network, and start the Person API.
-
-<h3>Step 3: Build the Project</h3>
-<pre><code>mvn clean install</code></pre>
-
-<h3>Step 4: Run the Application</h3>
-<pre><code>mvn spring-boot:run</code></pre>
-
-<h2>CORS Configuration</h2>
-
-The API supports CORS with configurable origin patterns:
-
-<pre><code>cors.originPatterns=http://localhost:3000,http://localhost:8080,https://www.erudio.com.br</code></pre>
-
-<h2>Test Environment</h2>
-
-- MySQL 9.1.0 via Docker Testcontainers
-- Automatic port allocation for parallel test execution
-- Database migrations via Flyway
-- Isolated database per test run
-
-<h2>Test Structure</h2>
-
-integrationtests/<br>
-├── controllers/<br>
-├── dto/<br>
-├── swagger/<br>
-└── testcontainers/<br>
-
-<h2>Project Structure</h2>
-
-src/<br>
-├── main/<br>
-│   ├── java/github/com/tiagoribeine/<br>
-│   │   ├── config/<br>
-│   │   ├── controller/<br>
-│   │   ├── model/<br>
-│   │   ├── repository/<br>
-│   │   ├── service/<br>
-│   │   └── dto/<br>
-│   └── resources/<br>
-│       ├── db/migration/<br>
-│       └── application.properties<br>
-└── test/<br>
-└── integrationtests/<br>
-
-<h2>License</h2>
-
+<h3>License </h3>
 This project is licensed under the MIT License.
+
+
+
