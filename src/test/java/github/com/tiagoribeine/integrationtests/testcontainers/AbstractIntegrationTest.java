@@ -1,5 +1,6 @@
 package github.com.tiagoribeine.integrationtests.testcontainers;
 
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
@@ -13,8 +14,6 @@ import java.util.stream.Stream;
 
 @ContextConfiguration(initializers = AbstractIntegrationTest.Initializer.class) //Configura o Spring para usar o Initializer como inicializador do contexto de aplicação durante os testes.
 public class AbstractIntegrationTest { //Classe abstrata base para testes de integração que usará containers Docker.
-
-
 
     static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
         //Classe deve ser estática pois só pode ter um container do test containers durante a execução

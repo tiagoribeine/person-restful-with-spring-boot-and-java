@@ -1,6 +1,6 @@
 # CONFIGURAÇÃO PRINCIPAL DO SPRING BOOT
 server:
-  port: 80
+  port: 0
 cors: #Adicionando o CORS globalmente
   originPatterns: ${CORS_ORIGINAL_PATTERNS:http://localhost:8080,http://localhost:3000}
 file:
