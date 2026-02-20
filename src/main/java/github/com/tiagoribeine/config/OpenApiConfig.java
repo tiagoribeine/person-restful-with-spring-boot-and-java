@@ -15,7 +15,7 @@ public class OpenApiConfig {
             .info(new Info()
                     .title("REST API's RESTful")
                         .version("v1")
-                        .description("REST API's RESTful")
+                        .description("REST API's RESTful - Foo Bar")
                        .termsOfService("https://github.com/tiagoribeine")
                         .license(new License()
                             .name("Apache 2.0")
