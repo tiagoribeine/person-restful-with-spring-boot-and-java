@@ -74,8 +74,8 @@ jobs:
         uses: aws-actions/amazon-ecs-deploy-task-definition@v2
         with:
           task-definition: ${{ steps.task-def.outputs.task-definition }}
-          service: ${{SERVICE_NAME}}
-          cluster: ${{CLUSTER_NAME}}
+          service: ${{ secrets.SERVICE_NAME}}
+          cluster: ${{ secrets.CLUSTER_NAME}}
           wait-for-service-stability: true
 
       - name: Push to Docker Hub Container Registry
